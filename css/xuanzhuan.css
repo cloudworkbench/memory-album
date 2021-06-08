@@ -1,0 +1,54 @@
+.xuanzhuan {
+    width:200px;
+    height:200px;
+    margin: 100px auto;
+    background: url("../images/xuanzhuan/shu.jpg") no-repeat;
+    background-size: cover;
+    transform-style: preserve-3d;
+    position: absolute;
+    transition: 15s linear;
+    top: 50%;
+    left: 42%;
+    z-index: initial;
+}
+.xuanzhuan:hover{
+    transform: rotateY(360deg);
+}
+.xuanzhuan div{
+    height:150px;
+    width: 200px;
+    position: absolute;
+    background-size: cover;
+    background: no-repeat;
+}
+.xuanzhuan div:nth-child(1){ /*0,0,2,1*/
+    background: url("../images/xuanzhuan/1.jpg");
+    background-size: cover;
+    transform:rotateY(0deg) translateZ(400px);
+}
+.xuanzhuan div:nth-child(2){
+    background: url("../images/xuanzhuan/2.jpg");
+    background-size: cover;
+    transform:rotateY(60deg) translateZ(400px);
+}
+.xuanzhuan div:nth-child(3){
+    background: url("../images/xuanzhuan/3.jpg");
+    background-size: cover;
+    transform:rotateY(120deg) translateZ(400px);
+}
+.xuanzhuan div:nth-child(4){
+    background: url("../images/xuanzhuan/4.jpg");
+    background-size: cover;
+    transform:rotateY(180deg) translateZ(400px);
+}
+.xuanzhuan div:nth-child(5){
+    background: url("../images/xuanzhuan/5.jpg");
+    background-size: cover;
+    transform:rotateY(240deg) translateZ(300px);
+}
+.xuanzhuan div:nth-child(6){
+    background: url("../images/xuanzhuan/6.jpg");
+    background-size: cover;
+    transform:rotateY(300deg) translateZ(300px);
+}
+
