@@ -1,0 +1,79 @@
+name: FE Project CI
+
+true:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
+        default: '1.0.0'
+      oss_region:
+        description: 'oss region'
+        required: true
+        default: 'oss-cn-shanghai'
+      oss_bucket:
+        description: 'oss bucket'
+        required: true
+        default: 'default'
+      oss_path:
+        description: 'oss path'
+        required: false
+        default: ''
+      upload_path:
+        description: 'upload path'
+        required: true
+        default: 'build'
+
+jobs:
+  pre-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: check config files
+        run: test -f ./package.json && exit 0 || (echo 'package.json is not exist!' && exit 1)
+
+  unit-test:
+    needs: pre-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: node-unit-test
+        run: npm install --registry https://registry.npm.taobao.org/ && npm run test --if-present
+
+
+  build-and-deploy:
+    needs: unit-test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install deps
+        run: npm install --registry https://registry.npm.taobao.org/
+
+      - name: build
+        run: npm run build --if-present
+
+      - name: deploy
+        id: upload_to_oss
+        uses: AliyunWorkbench/workbench-oss@1.0.0
+        with:
+          ACCESS_KEY: ${{ secrets.AK }}
+          ACCESS_SECRET: ${{ secrets.SK }}
+          OSS_REGION: ${{github.event.inputs.oss_region}}
+          OSS_BUCKET: ${{github.event.inputs.oss_bucket}}
+          OSS_PATH: ${{github.event.inputs.oss_path}}/${{github.event.inputs.version}}
+          UPLOAD_PATH: ${{github.event.inputs.upload_path}}
+
+
